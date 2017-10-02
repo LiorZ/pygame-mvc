@@ -1,4 +1,5 @@
 from collections import defaultdict
+import sys
 class Model:
 
     def __init__(self):
@@ -13,14 +14,13 @@ class Model:
         return getattr(self,kw,None)
 
     def set(self,kw,val):
+        oldval = getattr(self,kw,None)
         setattr(self,kw,val)
-        self._notify({kw:val})
+        self._notify(kw,oldval,val)
 
     def registerObserver(self,obs,key_to_observe):
         self.observers[key_to_observe].append(obs)
 
-    def _notify(self,**kwargs):
-        keys = kwargs.keys()
-        for k in keys:
-            for obs in self.observers[k]:
-                obs.notify(self.model,{k:kwargs[k]})
+    def _notify(self,key,oldval,newval):
+        for obs in self.observers[key]:
+            obs.notify(self,key,oldval,newval)
