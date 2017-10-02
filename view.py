@@ -4,7 +4,7 @@ class View:
     def __init__(self,model):
         self.model = model
 
-    def notify(self):
+    def notify(self,**kwargs):
         pass
 
 
